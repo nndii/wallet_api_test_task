@@ -1,0 +1,8 @@
+[project]
+requires-python = ">= 3.12"
+
+[tool.ruff]
+src = ["wallet_api"]
+
+[tool.ruff.format]
+quote-style = "double"

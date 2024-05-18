@@ -1,0 +1,6 @@
+django-ninja==1.1.0
+django-ninja-extra==0.20.7
+structlog==24.1.0
+mysqlclient==2.2.4
+ruff==0.4.4
+gunicorn==22.0.0

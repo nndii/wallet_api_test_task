@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  wallet_api:
+    tty: true
+    build: .
+    image: wallet_api:latest
+    depends_on:
+      - db
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=rootpassword
+      - MYSQL_DB=wallet_db
+    volumes:
+      - ./:/var/app/
+    networks:
+      - base-network
+    command: >
+      sh -c "python manage.py migrate &&
+       gunicorn --bind 0.0.0.0:8000 wallet_api.wsgi:application"
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wallet_db
+    ports:
+      - '3306:3306'
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - base-network
+
+volumes:
+  db:
+  wallet_api:
+
+networks:
+  base-network:

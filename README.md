@@ -44,7 +44,7 @@ There is validation to prohibit the creation of a transaction if its negative am
 
 ```sh
 docker-compose build
-docker-compose up
+docker-compose up -d
 docker-compose exec wallet_api sh -c "./manage.py migrate"
 ```
 

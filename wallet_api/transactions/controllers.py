@@ -1,3 +1,4 @@
+from ninja_extra.searching import searching, Searching
 from ninja_extra import (
     ModelConfig,
     ModelControllerBase,
@@ -6,7 +7,6 @@ from ninja_extra import (
     paginate,
     route,
 )
-from ninja.params.functions import Query
 from exceptions import ServiceExceptionSchema
 from ninja_extra.ordering import Ordering, ordering
 from ninja_extra.pagination import PageNumberPaginationExtra, PaginatedResponseSchema
@@ -14,7 +14,6 @@ from ninja_extra.pagination import PageNumberPaginationExtra, PaginatedResponseS
 from transactions.models import Transaction
 from transactions.schemas import (
     CreateTransactionSchema,
-    TransactionFilterSchema,
     TransactionSchema,
 )
 from transactions.services import TransactionService
@@ -50,9 +49,9 @@ class TransactionModelController(ModelControllerBase):
         response=PaginatedResponseSchema[TransactionSchema],
     )
     @paginate(PageNumberPaginationExtra)
+    @searching(Searching, search_fields=["wallet__label", "=txid"])
     @ordering(Ordering, ordering_fields=["created_at", "updated_at"])
     def list(
         self,
-        filters: TransactionFilterSchema = Query(...),
     ):
-        return filters.filter(self.service.get_all())
+        return self.service.get_all()

@@ -8,8 +8,8 @@ class WalletService(ModelService):
     def __init__(self, model: type[Model] = Wallet) -> None:
         super().__init__(model)
 
-    def get_by_id(self, pk: int) -> Wallet | None:
+    def get_for_update(self, pk: int) -> Wallet | None:
         try:
-            return self.get_one(pk)
+            return Wallet.objects.select_for_update().get(pk=pk)
         except Wallet.DoesNotExist:
             return None

@@ -5,3 +5,5 @@ structlog==24.1.0
 mysqlclient==2.2.4
 ruff==0.4.4
 gunicorn==22.0.0
+pytest-django==4.8.0
+factory-boy==3.3.0

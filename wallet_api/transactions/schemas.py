@@ -1,14 +1,6 @@
-from typing import Optional
-
-from ninja import Field, FilterSchema, ModelSchema
+from ninja import ModelSchema
 
 from transactions.models import Transaction
-
-
-class TransactionFilterSchema(FilterSchema):
-    wallet_id: Optional[int] = None
-    wallet_label: Optional[str] = Field(None, q=["wallet__label__icontains"])
-    txid: Optional[str] = Field(None, q=["txid__icontains"])
 
 
 class CreateTransactionSchema(ModelSchema):

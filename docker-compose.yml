@@ -20,8 +20,7 @@ services:
     ports:
       - "8100:8000"
     command: >
-      sh -c "python manage.py migrate &&
-       gunicorn --bind 0.0.0.0:8000 wallet_api.wsgi:application --reload"
+      sh -c "gunicorn --bind 0.0.0.0:8000 wallet_api.wsgi:application --reload"
 
   db:
     image: mysql:8.0

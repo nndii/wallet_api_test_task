@@ -1,6 +1,6 @@
 from typing import Optional
 
-from ninja import FilterSchema, Schema
+from ninja import FilterSchema, ModelSchema
 
 from wallets.models import Wallet
 
@@ -9,7 +9,7 @@ class WalletFilterSchema(FilterSchema):
     label: Optional[str] = None
 
 
-class CreateOrUpdateWalletSchema(Schema):
+class CreateOrUpdateWalletSchema(ModelSchema):
     class Meta:
         model = Wallet
         fields = [
@@ -17,7 +17,7 @@ class CreateOrUpdateWalletSchema(Schema):
         ]
 
 
-class WalletSchema(Schema):
+class WalletSchema(ModelSchema):
     class Meta:
         model = Wallet
         fields = [

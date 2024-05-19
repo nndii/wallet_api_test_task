@@ -1,10 +1,8 @@
-from django.db.models import QuerySet
 from ninja_extra import (
     ModelConfig,
     ModelControllerBase,
     ModelPagination,
     ModelSchemaConfig,
-    ModelService,
     api_controller,
     paginate,
     route,
@@ -15,14 +13,15 @@ from ninja_extra.searching import Searching, searching
 
 from wallets.models import Wallet
 from wallets.schemas import WalletSchema
+from wallets.services import WalletService
 
 
 @api_controller("wallets", tags=["Wallet"])
 class WalletModelController(ModelControllerBase):
-    service = ModelService(model=Wallet)
+    service = WalletService()
     model_config = ModelConfig(
         model=Wallet,
-        allowed_routes=["create", "delete", "patch", "find_one"],
+        allowed_routes=["create", "patch", "find_one"],
         response_schema=WalletSchema,
         pagination=ModelPagination(),
         schema_config=ModelSchemaConfig(
@@ -35,5 +34,5 @@ class WalletModelController(ModelControllerBase):
     @paginate(PageNumberPaginationExtra)
     @searching(Searching, search_fields=["label"])
     @ordering(Ordering, ordering_fields=["label", "created_at", "updated_at"])
-    def list(self) -> list[Wallet] | QuerySet:
+    def list(self):
         return self.service.get_all()

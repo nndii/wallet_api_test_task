@@ -18,4 +18,4 @@ ENV PYTHONUNBUFFERED 1
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "python manage.py migrate && gunicorn --bind 0.0.0.0:8000 wallet_api.wsgi:application"]
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:8000 wallet_api.wsgi:application"]

@@ -4,7 +4,7 @@ from django.db import models
 
 
 class Wallet(models.Model):
-    label = models.CharField(max_length=255, null=False)
+    label = models.CharField(max_length=255, null=False, unique=True)
     balance = models.DecimalField(
         max_digits=18,
         decimal_places=2,

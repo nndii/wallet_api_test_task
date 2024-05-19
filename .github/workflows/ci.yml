@@ -49,6 +49,7 @@ jobs:
         pip install ruff
 
     - name: Run linter and formatter
+      working-directory: ./wallet_api
       run: |
         ruff check .
 
@@ -57,9 +58,11 @@ jobs:
         ruff format .
 
     - name: Run migrations
+      working-directory: ./wallet_api
       run: |
         python manage.py migrate
 
     - name: Run tests
+      working-directory: ./wallet_api
       run: |
-        pytest
+        pytest -vv

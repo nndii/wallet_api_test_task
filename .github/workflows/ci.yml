@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: wallet_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping --silent"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+
+    env:
+      MYSQL_HOST: 127.0.0.1
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: rootpassword
+      MYSQL_DB: wallet_db
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r conf/requirements.txt
+        pip install ruff
+
+    - name: Run linter and formatter
+      working-directory: ./wallet_api
+      run: |
+        ruff check .
+
+        ruff check . --fix
+
+        ruff format .
+
+    - name: Wait for MySQL to be ready
+      run: |
+        while ! mysqladmin ping -h"$MYSQL_HOST" --silent; do
+          echo "Waiting for MySQL to be ready..."
+          sleep 2
+        done
+
+    - name: Run migrations
+      working-directory: ./wallet_api
+      run: |
+        python manage.py migrate
+
+    - name: Run tests
+      working-directory: ./wallet_api
+      run: |
+        pytest -vv

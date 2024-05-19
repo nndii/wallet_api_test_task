@@ -21,7 +21,7 @@ def test_create_wallet(
 
 
 @pytest.mark.django_db
-def test_filter_transactions(
+def test_filter_wallets(
     f_api_client: TestClient,
 ) -> None:
     wallet_1 = WalletFactory()
